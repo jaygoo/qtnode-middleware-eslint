@@ -1,41 +1,50 @@
 'use strict';
 
-const webpack = require('webpack');
 const priter= require('qtnode-middleware-console');
+const childProcess = require('./utils/childProcess');
 const path = require('path');
 
-
 module.exports = function (args) {
-    let opts = Object.assign({}, args);
+    Object.assign({}, args);
 
-    const prodconfig = require(path.resolve(path.resolve(opts.rootDir, 'wpconf/prod.js')));
 
     return async function (next) {
-        priter.info('start build');
+        priter.info('正在进行静态代码规范检测>>>>>>>>>>>>>');
 
-        webpack(prodconfig, (err, stats) => {
-            if (err) {
-                priter.info('build faild');
+        await childProcess.spawnPromise('eslint',
+            [
+                path.resolve(process.cwd(), 'entry/'),
+                path.resolve(process.cwd(), 'src'),
+                path.resolve(process.cwd(), 'wpconf')
+            ],
+            {encoding: 'utf8', cwd: process.cwd()}
+        )
+            .then((data) => {
+                priter.data(data);
+                let arrErr = data.match(/problems \((.*?) errors/);
+                let arrWaring = data.match(/errors, (.*?) warnings/);
+                if(arrErr != null && arrErr != null)
+                    priter.warn('扫描出 错误:' + arrErr[1] + ' warings:' + arrWaring[1]);
+                priter.tip('静态代码规范检测通过 ');
 
-                throw err;
-            }
 
-            process.stdout.write(stats.toString({
-                colors: true,
-                modules: false,
-                children: false,
-                chunks: false,
-                chunkModules: false
-            }) + '\n\n' );
+            })
+            .catch((data) => {
+                priter.data(data);
 
-            if (stats.hasErrors()) {
-                priter.info('build faild');
+
+                let arrErr = data.match(/problems \((.*?) errors/);
+                let arrWaring = data.match(/errors, (.*?) warnings/);
+                if(arrErr != null && arrErr != null)
+                    priter.error('扫描出 错误:' + arrErr[1] + ' warings:' + arrWaring[1]);
+                priter.tip('静态代码规范检测未通过');
 
                 process.exit(1);
-            }
-        });
-        priter.info('build success');
+
+            });
 
         next();
     };
 };
+
+
