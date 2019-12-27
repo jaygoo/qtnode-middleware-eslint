@@ -17,10 +17,8 @@ webpack(webpackConfig, (err, stats) => {
     }) + '\n\n');
 
     if (stats.hasErrors()) {
-        console.log('Build failed with errors.\n');
         process.exit(1);
     }
 
-    console.log('build complete\n');
 
 });

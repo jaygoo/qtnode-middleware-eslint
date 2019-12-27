@@ -13,6 +13,8 @@ module.exports = function (args) {
 
         await childProcess.spawnPromise('eslint',
             [
+                '--color',
+                '--rulesdir ' + path.resolve(__dirname, '../'),
                 path.resolve(process.cwd(), 'entry/'),
                 path.resolve(process.cwd(), 'src'),
                 path.resolve(process.cwd(), 'wpconf')
@@ -39,7 +41,6 @@ module.exports = function (args) {
                     priter.error('扫描出 错误:' + arrErr[1] + ' warings:' + arrWaring[1]);
                 priter.tip('静态代码规范检测未通过');
 
-                process.exit(1);
 
             });
 

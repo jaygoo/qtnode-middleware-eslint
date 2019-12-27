@@ -15,12 +15,10 @@ parserOptions:
   ecmaVersion: 6
   sourceType": module
 
+
 rules:
   strict:
     - 0
-  indent:
-    - 1
-    - 4
 
   quotes:
     - 2
@@ -87,3 +85,6 @@ rules:
     - 2
   no-extra-boolean-cast:
     - 1
+  no-unused-vars:
+    - 0
+    - args: "none"

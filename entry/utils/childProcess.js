@@ -5,12 +5,12 @@ const { spawn, exec } = require('child_process');
 
 
 exports.execPromise = function (cmd, opts) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         exec(cmd, opts, (error, stdout, stderr) => {
             if (error) {
                 reject(false);
             }
-            if(!!stderr) {
+            if(stderr) {
                 reject(false);
             }
             priter.data(`${stdout}`);
@@ -18,10 +18,10 @@ exports.execPromise = function (cmd, opts) {
             resolve(true);
         });
     });
-}
+};
 
 exports.spawnPromise = async (cmd, args = [], opts = {}) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         const ls = spawn(cmd, args, opts);
 
         let result = '' ;
@@ -45,4 +45,4 @@ exports.spawnPromise = async (cmd, args = [], opts = {}) => {
                 reject(result);
         });
     });
-}
+};

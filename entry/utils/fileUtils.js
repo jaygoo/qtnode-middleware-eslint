@@ -1,32 +1,32 @@
 //下载参数
-var http = require("http");
-var fs = require("fs");
-var path = require("path");
-const unzip = require("unzip");
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const unzip = require('unzip');
 
-var downFlag = false;
-var downUrl = '';
-var downFileName = '';
-const printer = require("qtnode-middleware-console");
+let downFlag = false;
+let downUrl = '';
+let downFileName = '';
+const printer = require('qtnode-middleware-console');
 const compressing = require('compressing');
 
 
-exports.download =   async (url, dir, fileName) => {
+exports.download = async (url, dir, fileName) => {
 
     return new Promise((resolve, reject) => {
-        printer.info("开始下载: " + url + fileName);
+        printer.info('开始下载: ' + url + fileName);
 
         let req = http.request(url + fileName, (res)=>{
-            var contentLength = parseInt(res.headers['content-length']);
+            const contentLength = parseInt(res.headers['content-length']);
 
-            var downLength = 0;
+            let downLength = 0;
 
-            var out = fs.createWriteStream(dir + "/" + fileName);
+            const out = fs.createWriteStream(dir + '/' + fileName);
             res.on('data', function (chunk) {
 
                 downLength += chunk.length;
-                var progress =  Math.floor(downLength * 100 / contentLength);
-                var str = "下载进度："+ progress +"%";
+                const progress = Math.floor(downLength * 100 / contentLength);
+                const str = '下载进度：'+ progress +'%';
                 printer.data(str);
 
                 //写文件
@@ -38,12 +38,12 @@ exports.download =   async (url, dir, fileName) => {
             res.on('end', function() {
                 downFlag = false;
                 if (isNaN(contentLength)) {
-                    printer.error("下载异常");
+                    printer.error('下载异常');
                     reject(false);
                     return;
                 }
                 if (downLength < contentLength) {
-                    printer.error("下载异常");
+                    printer.error('下载异常');
                     reject(false);
                     return;
                 }
@@ -55,20 +55,20 @@ exports.download =   async (url, dir, fileName) => {
         });
 
         req.on('error', function(e){
-            printer.error("download error:  " + url);
+            printer.error('download error:  ' + url);
             reject(false);
 
         });
         req.end();
-    })
+    });
 
-}
+};
 
 exports.unzip = async (zip_path, taget_path) => {
     return new Promise((resolve, reject) => {
         //判断压缩文件是否存在
         if (!fs.existsSync(zip_path)) {
-            printer.error("unzip error");
+            printer.error('unzip error');
 
             process.exit(1);
         }
@@ -84,20 +84,20 @@ exports.unzip = async (zip_path, taget_path) => {
         });
 
 
-        fs.createReadStream(zip_path).pipe(unzip_extract)
-            // .on("close", function (...args) {
-            //     console.log(" 解压完毕");
+        fs.createReadStream(zip_path).pipe(unzip_extract);
+            // .on('close', function (...args) {
+            //     console.log(' 解压完毕');
             //     resolve(args);
             // })
-            // .on("error", (e) => {
-            //     console.log("解压出错")
+            // .on('error', (e) => {
+            //     console.log('解压出错')
             //     reject(e);
             // })
-    })
+    });
 
 
 
-}
+};
 
 
 // exports.unzip = async (zip_path, taget_path) => {

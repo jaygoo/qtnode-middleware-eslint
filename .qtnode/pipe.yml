@@ -2,23 +2,16 @@ init:
   - pkg: console
 
 dev:
+  - pkg: console
   - middleware: devserver
-  - name: browser-sync
 
 build:
+  - middleware: eslint
+  - middleware: mocha
   - middleware: webpack
 
-
-add:
-  - name: react-component-creator
-
 test:
-  - name: lint
-  - name: unit
+  - middleware: eslint
+  - middleware: mocha
 
 publish:
-  - name: shell
-    script:
-      - dn test
-      - dn build
-      - npm pu
