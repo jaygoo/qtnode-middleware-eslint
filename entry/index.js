@@ -11,16 +11,13 @@ module.exports = function (args) {
     return async function (next) {
         priter.info('正在进行静态代码规范检测>>>>>>>>>>>>>');
 
-        await childProcess.spawnPromise('eslint',
-            [
-                '--color',
-                '--rulesdir ' + path.resolve(__dirname, '../'),
-                path.resolve(process.cwd(), 'entry/'),
-                path.resolve(process.cwd(), 'src'),
-                path.resolve(process.cwd(), 'wpconf')
-            ],
-            {encoding: 'utf8', cwd: process.cwd()}
-        )
+        let cmd = 'eslint --color  --fix';
+        cmd += ` ${ path.resolve(process.cwd(), 'entry/')}`;
+        cmd += ` --rulesdir  ${path.resolve(__dirname, '../')}`;
+        cmd += ` ${ path.resolve(process.cwd(), 'src/')} ${ path.resolve(process.cwd(), 'wpconf/')}`;
+
+        await childProcess.execPromise(cmd, {encoding: 'utf8', cwd: process.cwd()})
+
             .then((data) => {
                 priter.data(data);
                 let arrErr = data.match(/problems \((.*?) errors/);
