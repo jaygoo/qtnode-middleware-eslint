@@ -1,6 +1,6 @@
 {
   "name": "qtnode-middleware-eslint",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "webpack-build中间件",
   "main": "dist/index.js",
   "target": "es6",
