@@ -24,8 +24,7 @@ module.exports = function (args) {
                 let arrWaring = data.match(/errors, (.*?) warnings/);
                 if(arrErr != null && arrErr != null)
                     priter.warn('扫描出 错误:' + arrErr[1] + ' warings:' + arrWaring[1]);
-                priter.tip('静态代码规范检测通过 ');
-
+                priter.tip('eslint静态代码规范检测通过 ');
 
             })
             .catch((data) => {
@@ -37,7 +36,7 @@ module.exports = function (args) {
                 if(arrErr != null && arrErr != null)
                     priter.error('扫描出 错误:' + arrErr[1] + ' warings:' + arrWaring[1]);
                 priter.tip('静态代码规范检测未通过');
-
+                process.exit(1);
 
             });
 
