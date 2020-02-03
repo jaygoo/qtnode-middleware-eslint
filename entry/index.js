@@ -11,10 +11,10 @@ module.exports = function (args) {
     return async function (next) {
         priter.info('正在进行静态代码规范检测>>>>>>>>>>>>>');
 
-        let cmd = 'eslint --color  --fix';
+        let cmd = 'eslint --color  --fix --ext .jsx,.js,ts,tsx ';
         cmd += ` ${ path.resolve(process.cwd(), 'entry/')}`;
-        cmd += ` --rulesdir  ${path.resolve(__dirname, '../')}`;
         cmd += ` ${ path.resolve(process.cwd(), 'src/')} ${ path.resolve(process.cwd(), 'wpconf/')}`;
+        cmd += ` --rulesdir  ${path.resolve(__dirname, '../')}`;
 
         await childProcess.execPromise(cmd, {encoding: 'utf8', cwd: process.cwd()})
 
